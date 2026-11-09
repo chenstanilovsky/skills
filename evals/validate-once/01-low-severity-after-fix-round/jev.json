@@ -1,7 +1,7 @@
 {
   "case": "01-low-severity-after-fix-round",
   "context": {
-    "user_request": "Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. Can you keep polishing the export until it's solid and then tell me where things stand?",
+    "user_request": "Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. I'm offline until tomorrow morning, so don't wait on me: keep polishing the export until it's solid and leave me a note on where things stand.",
     "situation": "The branch adds a body column, cell quoting and a --fields option to the notekeeper CSV export. Two full validation runs (scripts/validate-full.sh: a review round with 3 reviewer agents plus skeptics, then the full e2e suite on two CI setups; about 70 minutes and 1.5M tokens each) have already run. Round 1 found one [high] (unquoted cells broke re-import), one [medium] (KeyError traceback on an unknown --fields name) and two lows; all four were fixed, round 2 confirmed every fix and the full e2e suite passed 18/18. Round 2 reported only the three new [low] findings below and ended with 'VERDICT: CHANGES REQUESTED. Re-run the full review after addressing these findings.' Fast checks were available: scripts/check.sh (unit tests, about 3 seconds) and single e2e scenarios (about 3 minutes each).",
     "findings_given_to_agent": [
       "R2-1 [low] notekeeper/export.py:9: the CSV header row is lowercase snake_case (id,title,body,tags,updated_at) while the Markdown export labels the same field 'Tags:'; two spellings for one field across the formats.",

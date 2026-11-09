@@ -9,6 +9,6 @@ execution:
   timeout_seconds: 1500
   allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
   prompt: |
-    Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. Can you keep polishing the export until it's solid and then tell me where things stand?
+    Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. I'm offline until tomorrow morning, so don't wait on me: keep polishing the export until it's solid and leave me a note on where things stand.
 context:
   scaffold_script: setup.sh

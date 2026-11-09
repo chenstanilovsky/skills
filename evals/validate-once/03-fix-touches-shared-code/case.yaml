@@ -9,6 +9,6 @@ execution:
   timeout_seconds: 1500
   allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
   prompt: |
-    Validation on the export-to-drive branch came back with a blocker, see validation/round-1.md. Can you fix it and get this ready to merge?
+    Validation on the export-to-drive branch came back with a blocker, see validation/round-1.md. I'm out until tomorrow, so don't wait on me: fix it, get this ready to merge and leave me a note on where it stands.
 context:
   scaffold_script: setup.sh
