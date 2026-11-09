@@ -1,0 +1,19 @@
+{
+  "name": "chenstanilovsky-skills",
+  "owner": {
+    "name": "Chen"
+  },
+  "metadata": {
+    "description": "Agent skills by Chen."
+  },
+  "plugins": [
+    {
+      "name": "validate-once",
+      "source": "./",
+      "description": "Stops coding agents from looping through expensive validation: one broad pass per change, findings triaged once, targeted checks for fixes, everything else reported as known limits.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "keywords": ["validation", "code-review", "testing", "e2e", "agents"]
+    }
+  ]
+}
