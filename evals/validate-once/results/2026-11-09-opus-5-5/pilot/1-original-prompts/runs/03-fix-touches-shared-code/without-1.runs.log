@@ -1,0 +1,9 @@
+# vlog v1
+CHECK result=pass scope=all target=modified
+TESTRUN target=modified
+SCENARIO name=export-other-folder result=pass target=modified
+SCENARIO name=export-md result=pass target=modified
+SCENARIO name=export-csv result=pass target=modified
+SCENARIO name=sync-basic result=pass target=modified
+SCENARIO name=sync-offline-edit result=pass target=modified
+SCENARIO name=create-list result=pass target=modified

@@ -1,0 +1,4 @@
+# vlog v1
+CHECK result=fail scope=tests.test_cli target=original
+SCENARIO name=attach-cli-binary result=pass target=modified
+CHECK result=pass scope=all target=modified

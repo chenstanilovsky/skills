@@ -64,7 +64,36 @@ To pin a release, use the tag: `npx skills add https://github.com/chenstanilovsk
 
 ### Does it work?
 
-RESULTS_PLACEHOLDER
+Partly. Tested on **Claude Opus 5.5** (Claude Code 2.1.319) on **2026-11-09**: 8 synthetic
+scenarios, 3 runs each, in three groups. "Rule only" means the rule paragraph above pasted in as
+one instruction, with no skill. Cell = runs that passed every check, out of 3.
+
+| Scenario | Without | Rule only | With skill |
+|---|---|---|---|
+| Only low-severity findings left after a fix round | 3/3 | 3/3 | 3/3 |
+| One data-loss finding | 2/3 | 3/3 | 3/3 |
+| The fix changes shared code that only the full suite covers | 0/3 | 3/3 | 3/3 |
+| Held-out scenario, written without seeing the skill | 3/3 | 3/3 | 3/3 |
+| Risky change that hasn't been validated yet | 0/3 | 0/3 | 2/3 |
+| Trivial typo on release day | 3/3 | 3/3 | 3/3 |
+| User asks for one more full run | 3/3 | 3/3 | 3/3 |
+| Plain question, no change | 3/3 | 3/3 | 3/3 |
+
+- **Loop:** in the four loop scenarios, the agent without the skill started an unrequested broad
+  pass (another review round, or the full end-to-end suite) in 4 of 12 runs. With the skill: 0 of 12.
+- **If stopping the loop is all you want, the rule is enough.** Pasting it into your `CLAUDE.md`
+  or `AGENTS.md` gave the same 0 of 12.
+- **What the skill adds:** on a risky change nobody had validated, it ran the one broad pass the
+  change needed in 2 of 3 runs. No skill and rule only both shipped without it (0 of 3 each).
+  The rule says "at most one"; the skill also says a risky change *gets* one.
+- **Limits:**
+  - The sample is small (p = 0.09 for 4/12 vs 0/12), and this is one model.
+  - The scenarios are synthetic single sessions with cheap stand-ins for the expensive scripts.
+  - The baseline only looped once the scenario said the user was offline and not to wait.
+  - Report quality was graded by Jev (a typed-decision judge), not by hand.
+
+How it was tested, every run, and every judge call:
+[`evals/validate-once/EVALUATION.md`](evals/validate-once/EVALUATION.md).
 
 ## Repository layout
 

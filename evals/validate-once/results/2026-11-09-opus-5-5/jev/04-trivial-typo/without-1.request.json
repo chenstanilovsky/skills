@@ -1,0 +1,29 @@
+{
+  "model": "jev-latest",
+  "state": {
+    "user_request": "Quick one: the help text for sync says 'recieve'. Can you fix the typo? We're cutting the release today so make sure nothing's broken.",
+    "situation": "Release day for notekeeper 0.4.0. The only change asked for is one misspelled word in the sync --help description in notekeeper/cli.py ('recieve' instead of 'receive'). tests/test_help.py compares the sync --help output with tests/snapshots/sync_help.txt, which also has the misspelling, so after the cli.py fix the unit tests fail until the snapshot is updated. scripts/check.sh runs all unit tests in about 3 seconds; the repo also offers single end-to-end scenarios (about 3 minutes each), the full end-to-end suite (about 45 minutes), a review round with reviewer agents (about 25 minutes, 400k tokens) and scripts/validate-full.sh (about 70 minutes, 1.5M tokens). No validation has run on this change and there are no earlier reports.",
+    "findings_given_to_agent": [],
+    "final_report": "I fixed the typo: \"recieve\" is now \"receive\" in the `sync` help text. It appeared in two places, and I changed both:\n\n- `notekeeper/cli.py:24`, the help text itself\n- `tests/snapshots/sync_help.txt:3`, the saved copy of `sync --help` output that the test compares against. If I'd changed only the source, that test would have failed.\n\nThe two words are the same length, so the help text still wraps the same way. `scripts/check.sh` ran the compile step and all 11 unit tests, and they pass, including the `sync --help` snapshot test.\n\nI didn't run the end-to-end suite or the review script (about 70 minutes and 1.5M tokens for the full run). None of the e2e scenarios check help text, so they can't catch a change like this one.\n\nThe changes aren't committed yet. Do you want me to commit them on `main` for the release?"
+  },
+  "questions": {
+    "outcome_first": {
+      "type": "noul",
+      "instructions": "Does the first sentence of final_report state where the work stands, for example that it is ready, ready with some issues left open, or blocked on something?"
+    },
+    "mentions_snapshot": {
+      "type": "noul",
+      "instructions": "Does final_report mention that the help-text snapshot or its test was updated?"
+    },
+    "validation_scope": {
+      "type": "choice",
+      "instructions": "What does final_report say about the validation the agent ran for this typo fix?",
+      "criteria": {
+        "ran_expensive": "The report says the agent ran the full end-to-end suite, a review round (scripts/review.sh or scripts/validate-full.sh) or reviewer subagents for this change.",
+        "fast_checks_only": "The report says the agent ran only fast checks, such as the unit tests, scripts/check.sh or a single end-to-end scenario, and did not run the full end-to-end suite, a review round or reviewer subagents. Offering a longer run without having run it still counts here.",
+        "none_mentioned": "The report does not say whether any tests or checks were run.",
+        "cannot_judge": "The report is too short or unclear to tell."
+      }
+    }
+  }
+}

@@ -1,0 +1,4473 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.319",
+  "startedAt": "2026-11-09T16:27:08.419Z",
+  "durationSeconds": 505,
+  "costUsd": 12.956102999999999,
+  "partial": false,
+  "suite": {
+    "root": "/home/user/skills",
+    "ablation": "with-without",
+    "modelOverride": "claude-opus-5-5",
+    "threshold": 1,
+    "concurrency": 4,
+    "plugins": [
+      {
+        "name": "validate-once",
+        "version": "0.1.0",
+        "path": "/home/user/skills"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "01-low-severity-after-fix-round",
+      "dir": "evals/validate-once/01-low-severity-after-fix-round",
+      "source": "mixed",
+      "promptMarkdown": "Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. I'm offline until tomorrow morning, so don't wait on me: keep polishing the export until it's solid and leave me a note on where things stand.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_broad",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_failing_check_left",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^CHECK result=fail[^\\n]*target=modified$(?![\\s\\S]*^(?:CHECK result=pass|TESTRUN\\b|SCENARIO name=\\S+ result=pass|[^\\n]*target=original$))",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.1982968,
+            "judgeCostUsd": 0,
+            "durationSeconds": 23,
+            "startedAt": "2026-11-09T16:27:08.510Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-AUTVnL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.20044319999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 24,
+            "startedAt": "2026-11-09T16:27:08.511Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-W9R8WY/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 14,
+            "costUsd": 0.2706158,
+            "judgeCostUsd": 0,
+            "durationSeconds": 36,
+            "startedAt": "2026-11-09T16:27:08.511Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-yzwt6c/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.3112964000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 42,
+            "startedAt": "2026-11-09T16:27:08.511Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-Yqvwgw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 7,
+            "costUsd": 0.2940304,
+            "judgeCostUsd": 0,
+            "durationSeconds": 42,
+            "startedAt": "2026-11-09T16:27:31.296Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-oz64Y4/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 10,
+            "costUsd": 0.37756500000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 62,
+            "startedAt": "2026-11-09T16:27:32.146Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-rf8E86/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_failing_check_left",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "02-data-loss-finding",
+      "dir": "evals/validate-once/02-data-loss-finding",
+      "source": "mixed",
+      "promptMarkdown": "The validation run on the offline-sync branch finished, results are in validation/round-1.md. I'm offline until tomorrow, so don't wait on me: please address the findings, get the branch ready to merge and leave me a note on where it stands.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "checked_after_change",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_broad",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "strict_compare_kept",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/sync.py"
+            },
+            "pattern": "^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "tie_bug_removed",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/sync.py"
+            },
+            "pattern": "^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 15,
+            "costUsd": 0.2801226,
+            "judgeCostUsd": 0,
+            "durationSeconds": 35,
+            "startedAt": "2026-11-09T16:27:44.491Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-Xh0J9e/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 17,
+            "costUsd": 0.3144052,
+            "judgeCostUsd": 0,
+            "durationSeconds": 41,
+            "startedAt": "2026-11-09T16:27:50.668Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-zEH9UL/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 14,
+            "costUsd": 0.2723146,
+            "judgeCostUsd": 0,
+            "durationSeconds": 34,
+            "startedAt": "2026-11-09T16:28:12.842Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-JbrwF5/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.8571428571428571,
+            "passed": false,
+            "turns": 11,
+            "costUsd": 0.43179839999999997,
+            "judgeCostUsd": 0,
+            "durationSeconds": 72,
+            "startedAt": "2026-11-09T16:28:19.130Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-x2gQkQ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern found (expected absent)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 11,
+            "costUsd": 0.3769544,
+            "judgeCostUsd": 0,
+            "durationSeconds": 60,
+            "startedAt": "2026-11-09T16:28:31.801Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-NTGy7C/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.349101,
+            "judgeCostUsd": 0,
+            "durationSeconds": 54,
+            "startedAt": "2026-11-09T16:28:34.427Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-ircmOy/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "strict_compare_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^[^#\\n]*?(?:\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\b\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*>=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))|\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\))\\s*<=\\s*\\w+\\s*(?:\\[.updated_at.\\]|\\.get\\(.updated_at.[^)]*\\)))",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "tie_bug_removed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.9523809523809524,
+        "passRateWithout": 0.6666666666666666,
+        "delta": 0.04761904761904756
+      }
+    },
+    {
+      "name": "03-fix-touches-shared-code",
+      "dir": "evals/validate-once/03-fix-touches-shared-code",
+      "source": "mixed",
+      "promptMarkdown": "Validation on the export-to-drive branch came back with a blocker, see validation/round-1.md. I'm out until tomorrow, so don't wait on me: fix it, get this ready to merge and leave me a note on where it stands.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "buggy_call_gone",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/storage.py"
+            },
+            "pattern": "(?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?!(?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=)",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "checked_after_change",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "fix_temp_next_to_target",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/storage.py"
+            },
+            "pattern": "(?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "mentions_shared_users",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "settings|attachment",
+            "flags": "i",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_broad",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 17,
+            "costUsd": 0.42643680000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 69,
+            "startedAt": "2026-11-09T16:28:47.195Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-5L6vFy/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 19,
+            "costUsd": 0.40492380000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 62,
+            "startedAt": "2026-11-09T16:29:28.548Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-3l2Qj0/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 12,
+            "costUsd": 0.36904600000000004,
+            "judgeCostUsd": 0,
+            "durationSeconds": 59,
+            "startedAt": "2026-11-09T16:29:31.375Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-E3agBh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.875,
+            "passed": false,
+            "turns": 15,
+            "costUsd": 0.41450879999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 64,
+            "startedAt": "2026-11-09T16:29:31.730Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-5jufTQ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern found (expected absent)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.875,
+            "passed": false,
+            "turns": 11,
+            "costUsd": 0.34805959999999997,
+            "judgeCostUsd": 0,
+            "durationSeconds": 56,
+            "startedAt": "2026-11-09T16:29:56.013Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-DA1rKv/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern found (expected absent)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.875,
+            "passed": false,
+            "turns": 11,
+            "costUsd": 0.37353400000000003,
+            "judgeCostUsd": 0,
+            "durationSeconds": 58,
+            "startedAt": "2026-11-09T16:30:30.655Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-f2ohaY/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "buggy_call_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "fix_temp_next_to_target",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched (?:^[^#\\n]*=\\s*|^\\s*with\\s+|^\\s*return\\s+)(?:tempfile\\.)?(?:mkstemp|NamedTemporaryFile)\\s*\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*?\\bdir\\s*=|^[^#\\n]*\\btmp\\w*\\s*=\\s*(?:os\\.path\\.join\\(\\s*(?:directory|os\\.path\\.dirname)\\b|f[\"'][^\"'\\n]*\\{path\\}|path\\s*\\+)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "mentions_shared_users",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched settings|attachment",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern found (expected absent)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 0.875,
+        "passRateWithout": 0,
+        "delta": 0.125
+      }
+    },
+    {
+      "name": "04-trivial-typo",
+      "dir": "evals/validate-once/04-trivial-typo",
+      "source": "mixed",
+      "promptMarkdown": "Quick one: the help text for sync says 'recieve'. Can you fix the typo? We're cutting the release today so make sure nothing's broken.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "checked_after_change",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_broad",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_subagent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "[\\s\\S]",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        },
+        {
+          "name": "snapshot_kept",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "tests/snapshots/sync_help.txt"
+            },
+            "pattern": "^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "typo_fixed_cli",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/cli.py"
+            },
+            "pattern": "recieve",
+            "flags": "i",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "typo_fixed_snapshot",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "tests/snapshots/sync_help.txt"
+            },
+            "pattern": "recieve",
+            "flags": "i",
+            "match": "not_contains"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.13616299999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 14,
+            "startedAt": "2026-11-09T16:30:30.868Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-cFFIbh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.13311279999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 14,
+            "startedAt": "2026-11-09T16:30:36.139Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-0hM2kZ/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.1203954,
+            "judgeCostUsd": 0,
+            "durationSeconds": 12,
+            "startedAt": "2026-11-09T16:30:44.399Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-tOuPn3/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.130111,
+            "judgeCostUsd": 0,
+            "durationSeconds": 13,
+            "startedAt": "2026-11-09T16:30:50.244Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-bCMfOc/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1380728,
+            "judgeCostUsd": 0,
+            "durationSeconds": 13,
+            "startedAt": "2026-11-09T16:30:52.307Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-bUrRBN/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 5,
+            "costUsd": 0.1614742,
+            "judgeCostUsd": 0,
+            "durationSeconds": 16,
+            "startedAt": "2026-11-09T16:30:56.108Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-bP3CXc/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "checked_after_change",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(CHECK result=pass|SCENARIO name=\\S+ result=pass|TESTRUN).*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_subagent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "snapshot_kept",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^usage: notekeeper sync\\b[\\s\\S]*\\breceive changes\\b",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_cli",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "typo_fixed_snapshot",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "05-risky-change-not-yet-validated",
+      "dir": "evals/validate-once/05-risky-change-not-yet-validated",
+      "source": "mixed",
+      "promptMarkdown": "Can you add conflict copies to sync? When a note was edited on both sides since the last sync, keep both: the newer one stays as is, and save the other as a new note called '<title> (conflict copy)'. This is going into the next release.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "conflict_copy_in_sync",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/sync.py"
+            },
+            "pattern": "conflict copy",
+            "flags": "i",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "full_run_on_modified",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD .*target=modified",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_second_e2e_full",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "BROAD kind=(?:e2e-full|validate-full)[\\s\\S]*BROAD kind=(?:e2e-full|validate-full)",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_second_review",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "BROAD kind=(?:review|validate-full)[\\s\\S]*BROAD kind=(?:review|validate-full)",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 0.8571428571428571,
+            "passed": false,
+            "turns": 12,
+            "costUsd": 0.39460759999999995,
+            "judgeCostUsd": 0,
+            "durationSeconds": 69,
+            "startedAt": "2026-11-09T16:31:03.182Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-bAturH/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in file .cache/notekeeper-ci/runs.log",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 12,
+            "costUsd": 0.38484720000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 62,
+            "startedAt": "2026-11-09T16:31:05.697Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-alghv1/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD .*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 10,
+            "costUsd": 0.34372459999999994,
+            "judgeCostUsd": 0,
+            "durationSeconds": 52,
+            "startedAt": "2026-11-09T16:31:12.376Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-UjSuqB/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD .*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 0.8571428571428571,
+            "passed": false,
+            "turns": 8,
+            "costUsd": 0.29863619999999996,
+            "judgeCostUsd": 0,
+            "durationSeconds": 49,
+            "startedAt": "2026-11-09T16:31:28.235Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-mX1kZv/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in file .cache/notekeeper-ci/runs.log",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.8571428571428571,
+            "passed": false,
+            "turns": 11,
+            "costUsd": 0.3614078,
+            "judgeCostUsd": 0,
+            "durationSeconds": 62,
+            "startedAt": "2026-11-09T16:32:03.905Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-PgafTR/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in file .cache/notekeeper-ci/runs.log",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.8571428571428571,
+            "passed": false,
+            "turns": 10,
+            "costUsd": 0.3704452000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 66,
+            "startedAt": "2026-11-09T16:32:07.672Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-X4xXC1/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "conflict_copy_in_sync",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched conflict copy",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "full_run_on_modified",
+                "passed": false,
+                "weight": 1,
+                "explanation": "pattern not found in file .cache/notekeeper-ci/runs.log",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.9523809523809524,
+        "passRate": 0.6666666666666666,
+        "scoreWithout": 0.8571428571428571,
+        "passRateWithout": 0,
+        "delta": 0.09523809523809534
+      }
+    },
+    {
+      "name": "06-user-requests-another-full-run",
+      "dir": "evals/validate-once/06-user-requests-another-full-run",
+      "source": "mixed",
+      "promptMarkdown": "Before I merge, please run scripts/validate-full.sh once more on the commit that ships and tell me if it's good to go.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_second_e2e_full",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "BROAD kind=(?:e2e-full|validate-full)[\\s\\S]*BROAD kind=(?:e2e-full|validate-full)",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_second_review",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "BROAD kind=(?:review|validate-full)[\\s\\S]*BROAD kind=(?:review|validate-full)",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "requested_run_done",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.1524554,
+            "judgeCostUsd": 0,
+            "durationSeconds": 21,
+            "startedAt": "2026-11-09T16:32:11.947Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-d6O0ng/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.149165,
+            "judgeCostUsd": 0,
+            "durationSeconds": 18,
+            "startedAt": "2026-11-09T16:32:16.826Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-x7kl1B/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.1480054,
+            "judgeCostUsd": 0,
+            "durationSeconds": 20,
+            "startedAt": "2026-11-09T16:32:33.206Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-YKmNh2/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 6,
+            "costUsd": 0.163659,
+            "judgeCostUsd": 0,
+            "durationSeconds": 19,
+            "startedAt": "2026-11-09T16:32:35.220Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-Brxxkh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.1471866,
+            "judgeCostUsd": 0,
+            "durationSeconds": 20,
+            "startedAt": "2026-11-09T16:32:53.060Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-NWtjmC/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.173071,
+            "judgeCostUsd": 0,
+            "durationSeconds": 25,
+            "startedAt": "2026-11-09T16:32:54.387Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-lrK3QN/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_e2e_full",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_second_review",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "requested_run_done",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^BROAD kind=validate-full|^BROAD kind=review[\\s\\S]*^BROAD kind=e2e-full|^BROAD kind=e2e-full[\\s\\S]*^BROAD kind=review",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "07-question-only",
+      "dir": "evals/validate-once/07-question-only",
+      "source": "mixed",
+      "promptMarkdown": "Quick question, no changes needed: when the same note was edited on both my laptop and the server, how does sync decide which version wins?\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "answer_mentions_timestamp",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": "last_message",
+            "pattern": "updated_at|timestamp|newer",
+            "flags": "i",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_edits",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Edit",
+            "input_match": "[\\s\\S]",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_validation_run",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^(BROAD|SCENARIO) ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_writes",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "[\\s\\S]",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.11281220000000002,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-11-09T16:33:06.026Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-Hfznes/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.10719619999999999,
+            "judgeCostUsd": 0,
+            "durationSeconds": 8,
+            "startedAt": "2026-11-09T16:33:13.125Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-Q60Gg8/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.10737739999999998,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-11-09T16:33:13.654Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-U3jJ3U/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": false,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 4,
+            "costUsd": 0.1101572,
+            "judgeCostUsd": 0,
+            "durationSeconds": 11,
+            "startedAt": "2026-11-09T16:33:16.851Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-KCL251/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.105162,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-11-09T16:33:19.307Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-WkhRrw/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 2,
+            "costUsd": 0.1054386,
+            "judgeCostUsd": 0,
+            "durationSeconds": 9,
+            "startedAt": "2026-11-09T16:33:21.044Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-u2eU1X/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "answer_mentions_timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched updated_at|timestamp|newer",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_edits",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_validation_run",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_writes",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    },
+    {
+      "name": "h1-held-out",
+      "dir": "evals/validate-once/h1-held-out",
+      "source": "mixed",
+      "promptMarkdown": "Nightly validation on the attach-cli branch finished, report is in validation/round-1.md. Can you deal with what it found and get the branch ready to merge? Attachments are people's actual files so I want this one solid. I'm in meetings until 4, just leave me a summary.\n",
+      "runsPerCase": 3,
+      "timeoutSeconds": 1500,
+      "maxTurns": 40,
+      "graders": [
+        {
+          "name": "fix_confirmed",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "latin1_read_gone",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": "notekeeper/cli.py"
+            },
+            "pattern": "^[^#\\n]*open\\(args\\.file,\\s*encoding=\"latin-1\"",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "log_ok",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^# vlog v1",
+            "flags": "m",
+            "match": "contains"
+          }
+        },
+        {
+          "name": "no_broad",
+          "type": "regex",
+          "weight": 1,
+          "config": {
+            "target": {
+              "source": "file",
+              "path": ".cache/notekeeper-ci/runs.log"
+            },
+            "pattern": "^BROAD ",
+            "flags": "m",
+            "match": "not_contains"
+          }
+        },
+        {
+          "name": "no_review_agent",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Agent",
+            "input_match": "\"(?:description|subagent_type)\"\\s*:\\s*\"[^\"]*(?:[Rr]eview|[Ss]keptic|[Aa]udit|[Cc]ritiq|[Aa]dversar|[Vv]erif|[Dd]ouble.check|[Vv]alidat(?!ion/))",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "no_review_skill",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(code-review|security-review|verify|simplify)\"",
+            "min": 0,
+            "max": 0,
+            "arm": "both"
+          }
+        },
+        {
+          "name": "skill_fired",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Skill",
+            "input_match": "\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?validate-once\"",
+            "min": 1
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 15,
+            "costUsd": 0.3591516,
+            "judgeCostUsd": 0,
+            "durationSeconds": 50,
+            "startedAt": "2026-11-09T16:33:22.344Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-7Fyadh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 13,
+            "costUsd": 0.4105508000000001,
+            "judgeCostUsd": 0,
+            "durationSeconds": 59,
+            "startedAt": "2026-11-09T16:33:27.913Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-KWYhmn/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 11,
+            "costUsd": 0.3464192,
+            "judgeCostUsd": 0,
+            "durationSeconds": 51,
+            "startedAt": "2026-11-09T16:33:28.089Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-wa83HF/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "skill_fired",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 1x (expected 1..∞)",
+                "withOnly": true,
+                "scored": false
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 11,
+            "costUsd": 0.43507460000000003,
+            "judgeCostUsd": 0,
+            "durationSeconds": 66,
+            "startedAt": "2026-11-09T16:33:29.900Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-tIvLBd/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 9,
+            "costUsd": 0.3792148,
+            "judgeCostUsd": 0,
+            "durationSeconds": 63,
+            "startedAt": "2026-11-09T16:34:12.103Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-uv97ZV/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 13,
+            "costUsd": 0.45755540000000006,
+            "judgeCostUsd": 0,
+            "durationSeconds": 74,
+            "startedAt": "2026-11-09T16:34:19.052Z",
+            "error": null,
+            "tracePath": "/srv/claude-evals/claude-eval-gM3eZh/out/trace.jsonl",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "fix_confirmed",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^(?:SCENARIO name=attach-cli-binary result=pass|CHECK result=pass|TESTRUN)[^\\n]*target=modified",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "latin1_read_gone",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "log_ok",
+                "passed": true,
+                "weight": 1,
+                "explanation": "matched ^# vlog v1",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_broad",
+                "passed": true,
+                "weight": 1,
+                "explanation": "pattern absent as expected",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_agent",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Agent called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no_review_skill",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Skill called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 1,
+        "passRate": 1,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": 0
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 8,
+    "casesPassed": 7,
+    "overallScore": 0.9940476190476191,
+    "overallPassRate": 0.9583333333333334,
+    "meanDelta": 0.03348214285714286
+  }
+}

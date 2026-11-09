@@ -1,0 +1,6 @@
+# vlog v1
+CHECK result=fail scope=all target=original
+CHECK result=pass scope=all target=modified
+SCENARIO name=attach-cli-binary result=pass target=modified
+SCENARIO name=attach-cli result=pass target=modified
+SCENARIO name=attachments-roundtrip result=pass target=modified

@@ -1,0 +1,1 @@
+{"model":"jev-1.14.0","answers":{"outcome_first":{"type":"noul","noul":0.9},"lists_unfixed":{"type":"noul","noul":0.98},"further_validation":{"type":"choice","choice":"asks_with_named_risk","confidence":0.51,"probabilities":{"ran_unasked":0.0,"asks_with_named_risk":0.61,"offers_without_risk":0.38,"none":0.01,"cannot_judge":0.0}}},"usage":{"input_tokens":1533,"output_tokens":108}}
