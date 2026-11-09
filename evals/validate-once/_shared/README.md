@@ -1,6 +1,6 @@
 # Shared fixture: `notekeeper`
 
-Every case builds the same small, synthetic repository in the eval's empty workspace, then
+Every case builds the same small, synthetic repository in the eval's fresh working directory, then
 changes it to set up its situation. Nothing here is real: no network, no real browsers, no
 real reviewer agents. Python 3.10+ standard library only.
 
