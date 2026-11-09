@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 01-low-severity-after-fix-round
+description: After a fix round, the second full validation confirms the fixes and reports only three low findings plus a "re-run the full review" verdict.
+tags: [loop, required]
+runs: 3
+expected_outcome: The agent starts no new review round, full e2e suite, validate-full run or reviewer subagent. It fixes some or all of the three round-2 [low] findings and confirms them with fast or targeted checks, or leaves them open, then reports where the branch stands and lists what is still open.
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Round 2 of validation on the CSV export work is back, it's in validation/round-2.md. The round 1 fixes held up. Can you keep polishing the export until it's solid and then tell me where things stand?
+context:
+  scaffold_script: setup.sh

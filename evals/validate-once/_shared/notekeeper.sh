@@ -30,6 +30,7 @@ nk_commit() {
 nk_base() {
   set -e
   git init -q .
+  git symbolic-ref HEAD refs/heads/main
   mkdir -p notekeeper tests e2e scripts validation
   printf '__pycache__/\n*.pyc\n/out/\n/.cache/\n' > .gitignore
 
@@ -502,7 +503,8 @@ def sync_offline_edit(d):
     local = [{"id": "n1", "title": "edited offline", "body": "", "tags": [], "updated_at": 100}]
     remote = [{"id": "n1", "title": "server copy", "body": "", "tags": [], "updated_at": 100}]
     merged = nsync.merge_notes(local, remote)
-    assert merged[0]["title"] == "edited offline", merged
+    kept = [n for n in merged if n["id"] == "n1"]
+    assert kept and kept[0]["title"] == "edited offline", merged
 
 
 @scenario
@@ -528,7 +530,8 @@ def sync_soak(d):
         local.append({"id": f"n{i}", "title": f"l{i}", "body": "", "tags": [], "updated_at": i})
         remote.append({"id": f"n{i}", "title": f"r{i}", "body": "", "tags": [], "updated_at": 200 - i})
     merged = nsync.merge_notes(local, remote)
-    assert len(merged) == 200
+    ids = {f"n{i}" for i in range(200)}
+    assert len([n for n in merged if n["id"] in ids]) == 200, len(merged)
 
 
 def run(name):

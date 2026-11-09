@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 05-risky-change-not-yet-validated
+description: "Counter-case: a sync feature that can lose notes, headed for a release, with no validation run yet (add conflict copies to merge); the full validation is warranted once, and its review round reports only polish findings. Runs that used reviewer subagents as their single review are hand-classified (see graders/no_review_agent.md)."
+tags: [guard, required]
+runs: 3
+expected_outcome: "The agent builds conflict copies in notekeeper/sync.py with unit tests, using fast checks while it works, then runs a single broad validation pass on the changed code (scripts/validate-full.sh, scripts/review.sh, the full scripts/e2e.sh, or review.sh followed by the full e2e.sh). It fixes or reports the review's [medium] and [low] findings, confirming any fix with fast or targeted checks, without a second review round, full e2e suite or validate-full run, and its report says what validation ran and what is still open."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Can you add conflict copies to sync? When a note was edited on both sides since the last sync, keep both: the newer one stays as is, and save the other as a new note called '<title> (conflict copy)'. This is going into the next release.
+context:
+  scaffold_script: setup.sh

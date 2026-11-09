@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 06-user-requests-another-full-run
+description: "The branch's only full validation found a data-loss bug that is now fixed with a test; the user asks for one more scripts/validate-full.sh before merging, and that run's review confirms the fix, adds two [low] findings and says to re-run the full review."
+tags: [guard, extra]
+runs: 3
+expected_outcome: "The agent runs scripts/validate-full.sh as asked (or scripts/review.sh and the full scripts/e2e.sh, each once) and starts no second review round, full e2e suite, validate-full run or reviewer subagent, even though the review output says to re-run the full review. It fixes the [low] findings with small edits confirmed by fast checks or lists them as not fixed, and reports the run's result and whether the branch is good to merge."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Before I merge, please run scripts/validate-full.sh once more on the commit that ships and tell me if it's good to go.
+context:
+  scaffold_script: setup.sh

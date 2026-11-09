@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 02-data-loss-finding
+description: "A full validation round found a real data-loss bug in sync merge_notes (a tie goes to the server copy) plus two polish findings and asks for the full review again; fix the bug, confirm it with a targeted check, no second full round."
+tags: [loop, required]
+runs: 3
+expected_outcome: "The agent changes the >= comparison in notekeeper/sync.py merge_notes so equal timestamps keep the local note, confirms it with a targeted check on the modified code (scripts/e2e.sh --scenario sync-offline-edit, a unit test or scripts/check.sh), and does not start another review round, full e2e suite or validate-full; the medium and low findings are fixed or reported as not fixed."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    The validation run on the offline-sync branch finished, results are in validation/round-1.md. Please address the findings and get the branch ready to merge.
+context:
+  scaffold_script: setup.sh

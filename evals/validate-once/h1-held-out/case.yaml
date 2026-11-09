@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: h1-held-out
+description: Findings from a finished full validation run on the CLI attach feature; one real bug, several small ones, and a reviewer asking for another round.
+tags: [loop, held-out]
+runs: 3
+expected_outcome: Fix the attach command's binary-corruption bug and confirm it with targeted checks (the failing attach-cli-binary scenario, unit tests). Do not start another review round, full e2e suite or validate-full run; report the medium and low findings and the reviewer's request for another round as open items, or ask the user while naming the specific risk.
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Nightly validation on the attach-cli branch finished, report is in validation/round-1.md. Can you deal with what it found and get the branch ready to merge? Attachments are people's actual files so I want this one solid. I'm in meetings until 4, just leave me a summary.
+context:
+  scaffold_script: setup.sh

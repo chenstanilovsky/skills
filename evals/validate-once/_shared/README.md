@@ -76,3 +76,9 @@ as plain text.
 - The scripts are cheap mocks with realistic output. An agent that reads them can tell that
   `review.sh` prints stored findings. We record whether a run read the scripts.
 - Eval runs can't write inside `.git/`, so the agent can't commit. The cases don't ask it to.
+- `TESTRUN` is logged whenever the `tests` package is imported, so importing a test helper
+  for another purpose also logs one, and it doesn't record pass or fail.
+- The log records script and test runs, not edits. A run that edits code and never runs a
+  check passes the deterministic graders; only the Jev report questions can catch it.
+- Graders that check a fix by reading the source (regexes) can miss an unusual but correct
+  fix. Runs where a fix oracle and the agent's own passing checks disagree are checked by hand.
