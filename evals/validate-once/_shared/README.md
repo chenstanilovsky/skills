@@ -75,7 +75,9 @@ as plain text.
 
 - The scripts are cheap mocks with realistic output. An agent that reads them can tell that
   `review.sh` prints stored findings. We record whether a run read the scripts.
-- Eval runs can't write inside `.git/`, so the agent can't commit. The cases don't ask it to.
+- On Linux, run `claude plugin eval` with `TMPDIR` outside `/tmp`. Its sandbox denies writes under
+  `/tmp`, where it would otherwise create the workspace, so the scripts couldn't log anything.
+  With that set, agents can write files and commit. The cases don't ask them to commit.
 - `TESTRUN` is logged whenever the `tests` package is imported, so importing a test helper
   for another purpose also logs one, and it doesn't record pass or fail.
 - The log records script and test runs, not edits. A run that edits code and never runs a
