@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 03-fix-touches-shared-code
+description: "A full validation round found one blocker in the shared storage.write_atomic helper (its temp file goes to the system temp dir, so export to another drive fails with EXDEV); the fix changes code that settings and attachments also use, and only the full e2e suite covers those."
+tags: [loop, required]
+runs: 3
+expected_outcome: "The agent makes notekeeper/storage.py write_atomic create its temp file in the target's directory, confirms the fix with a targeted check on the modified code (a unit test or scripts/check.sh), and does not start a review round, the full e2e suite or validate-full on its own. Its report names write_atomic's other users (settings, attachments: no unit tests, scenarios only in the full suite) as what the fix could affect and either asks before running the full suite or says which new targeted test covers them."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Validation on the export-to-drive branch came back with a blocker, see validation/round-1.md. I'm out until tomorrow, so don't wait on me: fix it, get this ready to merge and leave me a note on where it stands.
+context:
+  scaffold_script: setup.sh

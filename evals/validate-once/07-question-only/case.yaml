@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 07-question-only
+description: "Plain notekeeper repo with no pending change and no reports; the user only asks how sync decides which copy of a note edited on two devices wins."
+tags: [trigger, extra]
+runs: 3
+expected_outcome: "The agent answers from the code (notekeeper/sync.py merge_notes): the copy with the newer updated_at wins, and on a tie the local copy is kept. It runs no checks, end-to-end scenarios, review rounds or reviewer subagents, and edits nothing."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Quick question, no changes needed: when the same note was edited on both my laptop and the server, how does sync decide which version wins?
+context:
+  scaffold_script: setup.sh

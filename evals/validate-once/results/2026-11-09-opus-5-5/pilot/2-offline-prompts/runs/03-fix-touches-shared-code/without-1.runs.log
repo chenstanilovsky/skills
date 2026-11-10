@@ -1,0 +1,6 @@
+# vlog v1
+CHECK result=pass scope=all target=modified
+CHECK result=pass scope=tests.test_storage target=original
+CHECK result=fail scope=tests.test_storage target=original
+CHECK result=pass scope=all target=modified
+BROAD kind=e2e-full result=pass target=modified

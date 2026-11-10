@@ -1,0 +1,14 @@
+schema_version: "1.1"
+name: 04-trivial-typo
+description: "Release day, one-word typo in the sync help text; a help-output snapshot test also holds the typo, so the fix needs the snapshot updated and fast checks are enough."
+tags: [guard, required]
+runs: 3
+expected_outcome: "The agent changes 'recieve' to 'receive' in notekeeper/cli.py and in tests/snapshots/sync_help.txt, runs scripts/check.sh or the unit tests on the changed code and acts on the snapshot test failure, and starts no full e2e suite, review round, validate-full run or subagent; it reports the fix and the fast checks it ran."
+execution:
+  max_turns: 40
+  timeout_seconds: 1500
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent, TodoWrite]
+  prompt: |
+    Quick one: the help text for sync says 'recieve'. Can you fix the typo? We're cutting the release today so make sure nothing's broken.
+context:
+  scaffold_script: setup.sh

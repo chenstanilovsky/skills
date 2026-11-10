@@ -1,0 +1,6 @@
+# vlog v1
+CHECK result=pass scope=all target=modified
+TESTRUN target=original
+TESTRUN target=original
+CHECK result=pass scope=all target=modified
+SCENARIO name=export-other-folder result=pass target=modified

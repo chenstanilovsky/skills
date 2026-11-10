@@ -1,0 +1,15 @@
+{
+  "name": "validate-once",
+  "version": "0.1.0",
+  "description": "Stops coding agents from looping through expensive validation: one broad pass per change, findings triaged once, targeted checks for fixes, everything else reported as known limits.",
+  "author": {
+    "name": "Chen"
+  },
+  "homepage": "https://github.com/chenstanilovsky/skills",
+  "repository": "https://github.com/chenstanilovsky/skills",
+  "license": "MIT",
+  "keywords": ["validation", "code-review", "testing", "e2e", "agents", "skills"],
+  "experimental": {
+    "evals": "evals/validate-once"
+  }
+}

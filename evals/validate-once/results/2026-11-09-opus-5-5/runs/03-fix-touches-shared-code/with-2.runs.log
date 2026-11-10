@@ -1,0 +1,8 @@
+# vlog v1
+CHECK result=fail scope=tests.test_storage target=original
+CHECK result=fail scope=tests.test_storage target=original
+CHECK result=pass scope=all target=modified
+SCENARIO name=export-other-folder result=pass target=modified
+SCENARIO name=export-md result=pass target=modified
+SCENARIO name=sync-basic result=pass target=modified
+CHECK result=pass scope=all target=modified

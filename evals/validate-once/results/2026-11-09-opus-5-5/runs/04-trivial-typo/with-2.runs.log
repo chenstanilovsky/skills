@@ -1,0 +1,3 @@
+# vlog v1
+TESTRUN target=modified
+CHECK result=pass scope=all target=modified
